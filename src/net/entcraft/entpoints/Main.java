@@ -24,13 +24,13 @@ public class Main extends JavaPlugin {
 		String host = config.get("sql.host", "localhost");
 		String database = config.get("sql.database", "syncdb");
 		String username = config.get("sql.username", "admin");
-		String password = config.get("sql.password", "1234");
+		String password = config.get("sql.password", "12345");
 		config.saveAllData();
 		sql = new SQL(host, database, username, password);
 		sql.init();
 		if (!sql.checkTable(tableName)) {
 			log.info("Points table does not exist! Creating table...");
-			sql.standardQuery("CREATE TABLE " + tableName + " ('pname' varchar(255) PRIMARY KEY, 'donatedPoints' int, 'earnedPoints' int, 'vouchedPoints' int);");
+			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int);");
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);

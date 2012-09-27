@@ -13,7 +13,7 @@ public class PlayerJoinListener extends EntListener implements Listener {
 	
 	public void playerJoin(PlayerJoinEvent event) {
 		if (!plugin.pointGrabber.doesPlayerDataExist(event.getPlayer().getName())) {
-			plugin.sql.standardQuery("INSERT INTO " + Main.tableName + " VALUES (" + event.getPlayer().getName() + ", 0, 0, 0)");
+			plugin.sql.standardQuery("INSERT INTO " + Main.tableName + " VALUES (" + event.getPlayer().getName() + ", 0, 0, 0);");
 		}
 	}
 

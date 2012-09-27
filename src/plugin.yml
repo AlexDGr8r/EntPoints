@@ -1,0 +1,5 @@
+name: Entcraft Points
+main: net.entcraft.entpoints.Main
+description: Handles Ent Points for the Entcraft server
+author: AlexDGr8r
+version: 1.0
