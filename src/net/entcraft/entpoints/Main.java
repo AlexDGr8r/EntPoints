@@ -20,7 +20,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		log = this.getLogger();
 		config = new Config(this);
-		// Table = entPoints: pname - String, donatedPoints - INTEGER, earnedPoints - INTEGER, vouchedPoints - INTEGER
+		// Table = entPoints: pname - String, donatedPoints - INTEGER, earnedPoints - INTEGER, vouchedPoints - INTEGER, 
 		String host = config.get("sql.host", "localhost");
 		String database = config.get("sql.database", "syncdb");
 		String username = config.get("sql.username", "admin");
@@ -30,7 +30,7 @@ public class Main extends JavaPlugin {
 		sql.init();
 		if (!sql.checkTable(tableName)) {
 			log.info("Points table does not exist! Creating table...");
-			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int);");
+			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int, lastLogin DATE, timePlayed int);");
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);

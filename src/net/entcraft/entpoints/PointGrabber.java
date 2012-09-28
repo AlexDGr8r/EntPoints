@@ -1,5 +1,6 @@
 package net.entcraft.entpoints;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,6 +16,30 @@ public class PointGrabber {
 	
 	public boolean doesPlayerDataExist(String name) {
 		return sql.existenceQuery("SELECT * FROM " + Main.tableName + " WHERE pname='" + name + "';");
+	}
+	
+	public int getTimePlayed(String player) {
+		return getIntValue(player, PointColumn.TimePlayed);
+	}
+	
+	public void addTime(String player, int amount) {
+		addPoints(player, amount, PointColumn.TimePlayed);
+	}
+	
+	public Date getLastLogin(String player) {
+		ResultSet rs = sql.sqlQuery("SELECT " + PointColumn.LastLogin.toString() + " FROM " + Main.tableName + " WHERE pname='" + player + "';");
+		Date d = null;
+		try {
+			rs.first();
+			d = rs.getDate(PointColumn.LastLogin.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return d;
+	}
+	
+	public void setLastLogin(String player) {
+		sql.standardQuery("UPDATE " + Main.tableName + " SET " + PointColumn.LastLogin.toString() + "=CURDATE() " + " WHERE pname='" + player + "';");
 	}
 	
 	public int getTotalPoints(String player) {
@@ -70,11 +95,30 @@ public class PointGrabber {
 		sql.standardQuery("UPDATE " + Main.tableName + " SET " + column.toString() + "=" + (oldPoints + amount) + " WHERE pname='" + player + "';");
 	}
 	
+	public void deductDonatedPoints(String player, int amount) {
+		deductPoints(player, amount, PointColumn.Donated);
+	}
+	
+	public void deductEarnedPoints(String player, int amount) {
+		deductPoints(player, amount, PointColumn.Earned);
+	}
+	
+	public void deductVouchedPoints(String player, int amount) {
+		deductPoints(player, amount, PointColumn.Vouched);
+	}
+	
+	private void deductPoints(String player, int amount, PointColumn column) {
+		int oldPoints = getIntValue(player, column);
+		sql.standardQuery("UPDATE " + Main.tableName + " SET " + column.toString() + "=" + (oldPoints - amount) + " WHERE pname='" + player + "';");
+	}
+	
 	private enum PointColumn {
 		
 		Donated("donatedPoints"),
 		Earned("earnedPoints"),
-		Vouched("vouchedPoints");
+		Vouched("vouchedPoints"),
+		LastLogin("lastLogin"),
+		TimePlayed("timePlayed");
 		
 		private String columnName;
 		
