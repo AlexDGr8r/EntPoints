@@ -1,4 +1,4 @@
-package net.entcraft.tasks;
+package net.entcraft.entpoints.tasks;
 
 import org.bukkit.entity.Player;
 

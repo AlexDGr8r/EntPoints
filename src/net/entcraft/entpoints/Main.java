@@ -3,7 +3,7 @@ package net.entcraft.entpoints;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import net.entcraft.tasks.TaskTime;
+import net.entcraft.entpoints.tasks.TaskTime;
 import net.entcraft.utils.Config;
 import net.entcraft.utils.SQL;
 
