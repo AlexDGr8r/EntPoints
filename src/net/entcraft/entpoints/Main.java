@@ -1,7 +1,9 @@
 package net.entcraft.entpoints;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
+import net.entcraft.tasks.TaskTime;
 import net.entcraft.utils.Config;
 import net.entcraft.utils.SQL;
 
@@ -12,6 +14,7 @@ public class Main extends JavaPlugin {
 	public SQL sql;
 	public Config config;
 	public PointGrabber pointGrabber;
+	public HashMap<String, Integer> timePlayedWhenLogin = new HashMap<String, Integer>();
 	
 	private Logger log;
 	
@@ -34,11 +37,18 @@ public class Main extends JavaPlugin {
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);
+		createTasks();
 		
 	}
 	
 	public void onDisable() {
 		sql.closeConnection();
+	}
+	
+	private void createTasks() {
+		
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskTime(this), 20 * 15, 20 * 15);
+		
 	}
 
 }

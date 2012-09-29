@@ -27,6 +27,10 @@ public class PlayerJoinListener extends EntListener implements Listener {
 		} else if (!areDatesSame(event.getPlayer())) {
 			giveLoginBonus(event.getPlayer());
 		}
+		String pname = event.getPlayer().getName();
+		if (!plugin.timePlayedWhenLogin.containsKey(pname)) {
+			plugin.timePlayedWhenLogin.put(pname, plugin.pointGrabber.getTimePlayed(pname));
+		}
 	}
 	
 	private void giveLoginBonus(Player player) {
