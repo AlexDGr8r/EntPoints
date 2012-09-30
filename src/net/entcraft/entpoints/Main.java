@@ -3,9 +3,9 @@ package net.entcraft.entpoints;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import net.entcraft.entpoints.tasks.TaskTime;
-import net.entcraft.utils.Config;
-import net.entcraft.utils.SQL;
+import net.entcraft.entpoints.commands.*;
+import net.entcraft.entpoints.tasks.*;
+import net.entcraft.utils.*;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +14,7 @@ public class Main extends JavaPlugin {
 	public SQL sql;
 	public Config config;
 	public PointGrabber pointGrabber;
+	public EntCMD cmd;
 	public HashMap<String, Integer> timePlayedWhenLogin = new HashMap<String, Integer>();
 	
 	private Logger log;
@@ -23,6 +24,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		log = this.getLogger();
 		config = new Config(this);
+		cmd = new EntCMD(this, "points");
 		// Table = entPoints: pname - String, donatedPoints - INTEGER, earnedPoints - INTEGER, vouchedPoints - INTEGER, 
 		String host = config.get("sql.host", "localhost");
 		String database = config.get("sql.database", "syncdb");
@@ -37,6 +39,7 @@ public class Main extends JavaPlugin {
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);
+		cmd.addSubCommand("pointCheckSelf", new PointCheck(this, false), "check");
 		createTasks();
 		
 	}
