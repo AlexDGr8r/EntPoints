@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import net.entcraft.entpoints.commands.*;
+import net.entcraft.entpoints.listeners.*;
 import net.entcraft.entpoints.tasks.*;
 import net.entcraft.utils.*;
 
@@ -17,7 +18,7 @@ public class Main extends JavaPlugin {
 	public EntCMD cmd;
 	public HashMap<String, Integer> timePlayedWhenLogin = new HashMap<String, Integer>();
 	
-	private Logger log;
+	private static Logger log;
 	
 	public static String tableName = "entPoints";
 	
@@ -40,7 +41,9 @@ public class Main extends JavaPlugin {
 		}
 		pointGrabber = new PointGrabber(sql);
 		cmd.addSubCommand("pointCheckSelf", new PointCheck(this, false), "check");
+		cmd.addSubCommand("pointCheckOther", new PointCheck(this, true), "check <player>", 1);
 		createTasks();
+		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		
 	}
 	

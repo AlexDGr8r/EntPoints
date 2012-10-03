@@ -19,6 +19,7 @@ public class PointCheck extends BaseCMD implements IEntCommandHandler {
 	@Override
 	public boolean processCommand(CommandSender sender, String[] neededArgs) {
 		
+		sender.sendMessage("You made it to the command.");
 		String pname;
 		if (checkOtherPlayer) {
 			Player player = plugin.getServer().getPlayerExact(neededArgs[0]);
@@ -47,6 +48,11 @@ public class PointCheck extends BaseCMD implements IEntCommandHandler {
 			sender.sendMessage(ChatColor.RED + "Player data not found!");
 			return true;
 		}
+	}
+
+	@Override
+	public String getDescription() {
+		return "Checks your Points" + (checkOtherPlayer ? " or another player's." : ".");
 	}
 
 }

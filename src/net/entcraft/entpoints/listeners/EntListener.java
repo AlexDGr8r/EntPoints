@@ -10,7 +10,7 @@ public class EntListener implements Listener {
 	
 	public EntListener(Main instance) {
 		plugin = instance;
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+//		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 }

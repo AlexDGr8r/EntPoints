@@ -22,7 +22,7 @@ public class PlayerJoinListener extends EntListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void playerJoin(PlayerJoinEvent event) {
 		if (!plugin.pointGrabber.doesPlayerDataExist(event.getPlayer().getName())) {
-			plugin.sql.standardQuery("INSERT INTO " + Main.tableName + " VALUES (" + event.getPlayer().getName() + ", 0, 0, 0, CURDATE(), 0);");
+			plugin.sql.standardQuery("INSERT INTO " + Main.tableName + " VALUES ('" + event.getPlayer().getName() + "', 0, 0, 0, CURDATE(), 0);");
 			giveLoginBonus(event.getPlayer());
 		} else if (!areDatesSame(event.getPlayer())) {
 			giveLoginBonus(event.getPlayer());
