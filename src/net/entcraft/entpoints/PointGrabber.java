@@ -1,8 +1,8 @@
 package net.entcraft.entpoints;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import net.entcraft.utils.SQL;
 
@@ -18,28 +18,21 @@ public class PointGrabber {
 		return sql.existenceQuery("SELECT * FROM " + Main.tableName + " WHERE pname='" + name + "';");
 	}
 	
-	public int getTimePlayed(String player) {
-		return getIntValue(player, PointColumn.TimePlayed);
+	public long getTimePlayed(String player) {
+		return getLongValue(player, PointColumn.TimePlayed);
 	}
 	
-	public void addTime(String player, int amount) {
-		addPoints(player, amount, PointColumn.TimePlayed);
+	public void addTime(String player, long amount) {
+		addLong(player, amount, PointColumn.TimePlayed);
 	}
 	
-	public Date getLastLogin(String player) {
-		ResultSet rs = sql.sqlQuery("SELECT " + PointColumn.LastLogin.toString() + " FROM " + Main.tableName + " WHERE pname='" + player + "';");
-		Date d = null;
-		try {
-			rs.first();
-			d = rs.getDate(PointColumn.LastLogin.toString());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return d;
+	public long getLastLogin(String player) {
+		return getLongValue(player, PointColumn.LastLogin);
 	}
 	
 	public void setLastLogin(String player) {
-		sql.standardQuery("UPDATE " + Main.tableName + " SET " + PointColumn.LastLogin.toString() + "=CURDATE() " + " WHERE pname='" + player + "';");
+		Date today = new Date();
+		sql.standardQuery("UPDATE " + Main.tableName + " SET " + PointColumn.LastLogin.toString() + "=" + today.getTime() + "  WHERE pname='" + player + "';");
 	}
 	
 	public int getTotalPoints(String player) {
@@ -76,6 +69,23 @@ public class PointGrabber {
 			e.printStackTrace();
 		}
 		return p;
+	}
+	
+	private long getLongValue(String player, PointColumn column) {
+		ResultSet rs = sql.sqlQuery("SELECT " + column.toString() + " FROM " + Main.tableName + " WHERE pname='" + player + "';");
+		long p = 0;
+		try {
+			rs.first();
+			p = rs.getLong(column.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
+	
+	private void addLong(String player, long amount, PointColumn column) {
+		long oldPoints = getLongValue(player, column);
+		sql.standardQuery("UPDATE " + Main.tableName + " SET " + column.toString() + "=" + (oldPoints + amount) + " WHERE pname='" + player + "';");
 	}
 	
 	public void addDonatedPoints(String player, int amount) {

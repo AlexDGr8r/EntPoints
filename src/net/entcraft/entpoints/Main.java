@@ -16,7 +16,7 @@ public class Main extends JavaPlugin {
 	public Config config;
 	public PointGrabber pointGrabber;
 	public EntCMD cmd;
-	public HashMap<String, Integer> timePlayedWhenLogin = new HashMap<String, Integer>();
+	public HashMap<String, Long> timePlayedWhenLogin = new HashMap<String, Long>();
 	
 	private static Logger log;
 	
@@ -36,7 +36,7 @@ public class Main extends JavaPlugin {
 		sql.init();
 		if (!sql.checkTable(tableName)) {
 			log.info("Points table does not exist! Creating table...");
-			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int, lastLogin DATE, timePlayed int);");
+			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int, lastLogin bigint, timePlayed bigint);");
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);
@@ -55,6 +55,10 @@ public class Main extends JavaPlugin {
 		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskTime(this), 20 * 15, 20 * 15);
 		
+	}
+	
+	public static void log_info(String s) {
+		log.info(s);
 	}
 
 }

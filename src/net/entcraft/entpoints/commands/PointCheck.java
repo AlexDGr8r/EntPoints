@@ -19,7 +19,6 @@ public class PointCheck extends BaseCMD implements IEntCommandHandler {
 	@Override
 	public boolean processCommand(CommandSender sender, String[] neededArgs) {
 		
-		sender.sendMessage("You made it to the command.");
 		String pname;
 		if (checkOtherPlayer) {
 			Player player = plugin.getServer().getPlayerExact(neededArgs[0]);
@@ -40,9 +39,9 @@ public class PointCheck extends BaseCMD implements IEntCommandHandler {
 		if (plugin.pointGrabber.doesPlayerDataExist(pname)) {
 			sender.sendMessage(ChatColor.GOLD + "============" + pname + "'s Points============");
 			sender.sendMessage(ChatColor.GOLD + "Donated Points:" + plugin.pointGrabber.getDonatedPoints(pname));
-			sender.sendMessage(ChatColor.GOLD + " Earned Points:" + plugin.pointGrabber.getEarnedPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "Earned Points:" + plugin.pointGrabber.getEarnedPoints(pname));
 			sender.sendMessage(ChatColor.GOLD + "Vouched Points:" + plugin.pointGrabber.getVouchedPoints(pname));
-			sender.sendMessage(ChatColor.GOLD + "  Total Points:" + plugin.pointGrabber.getTotalPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "Total Points:" + plugin.pointGrabber.getTotalPoints(pname));
 			return true;
 		} else {
 			sender.sendMessage(ChatColor.RED + "Player data not found!");
