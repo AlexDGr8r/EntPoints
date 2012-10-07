@@ -37,11 +37,11 @@ public class PointCheck extends BaseCMD implements IEntCommandHandler {
 		}
 		
 		if (plugin.pointGrabber.doesPlayerDataExist(pname)) {
-			sender.sendMessage(ChatColor.GOLD + "============" + pname + "'s Points============");
-			sender.sendMessage(ChatColor.GOLD + "Donated Points:" + plugin.pointGrabber.getDonatedPoints(pname));
-			sender.sendMessage(ChatColor.GOLD + "Earned Points:" + plugin.pointGrabber.getEarnedPoints(pname));
-			sender.sendMessage(ChatColor.GOLD + "Vouched Points:" + plugin.pointGrabber.getVouchedPoints(pname));
-			sender.sendMessage(ChatColor.GOLD + "Total Points:" + plugin.pointGrabber.getTotalPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "============" + ChatColor.AQUA + pname + "'s Points" + ChatColor.GOLD + "============");
+			sender.sendMessage(ChatColor.GOLD + "Donated Points:" + ChatColor.WHITE + plugin.pointGrabber.getDonatedPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "Earned Points:" + ChatColor.WHITE + plugin.pointGrabber.getEarnedPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "Vouched Points:" + ChatColor.WHITE + plugin.pointGrabber.getVouchedPoints(pname));
+			sender.sendMessage(ChatColor.GOLD + "Total Points:" + ChatColor.WHITE + plugin.pointGrabber.getTotalPoints(pname));
 			return true;
 		} else {
 			sender.sendMessage(ChatColor.RED + "Player data not found!");

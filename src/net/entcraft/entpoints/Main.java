@@ -9,6 +9,7 @@ import net.entcraft.entpoints.tasks.*;
 import net.entcraft.utils.*;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class Main extends JavaPlugin {
 	
@@ -18,6 +19,8 @@ public class Main extends JavaPlugin {
 	public EntCMD cmd;
 	public HashMap<String, Long> timePlayedWhenLogin = new HashMap<String, Long>();
 	
+	private BlockListener blockListener;
+	
 	private static Logger log;
 	
 	public static String tableName = "entPoints";
@@ -26,7 +29,6 @@ public class Main extends JavaPlugin {
 		log = this.getLogger();
 		config = new Config(this);
 		cmd = new EntCMD(this, "points");
-		// Table = entPoints: pname - String, donatedPoints - INTEGER, earnedPoints - INTEGER, vouchedPoints - INTEGER, 
 		String host = config.get("sql.host", "localhost");
 		String database = config.get("sql.database", "syncdb");
 		String username = config.get("sql.username", "admin");
@@ -40,20 +42,26 @@ public class Main extends JavaPlugin {
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);
+		blockListener = new BlockListener(this);
 		cmd.addSubCommand("pointCheckSelf", new PointCheck(this, false), "check");
 		cmd.addSubCommand("pointCheckOther", new PointCheck(this, true), "check <player>", 1);
 		createTasks();
 		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+		this.getServer().getPluginManager().registerEvents(blockListener, this);
 		
 	}
 	
 	public void onDisable() {
+		this.getServer().getScheduler().cancelTasks(this);
+		config.saveAllData();
+		blockListener.saveBlocks();
 		sql.closeConnection();
 	}
 	
 	private void createTasks() {
 		
-		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskTime(this), 20 * 15, 20 * 15);
+		BukkitScheduler scheduler = this.getServer().getScheduler();
+		scheduler.scheduleSyncRepeatingTask(this, new TaskTime(this), 20 * 15, 20 * 15);
 		
 	}
 	
