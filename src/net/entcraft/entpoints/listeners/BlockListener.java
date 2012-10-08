@@ -113,14 +113,10 @@ public class BlockListener extends EntListener implements Listener {
 		if (!event.isSticky()) return;
 		BlockMemory blockMem =  blockMemory.get(event.getBlock().getLocation().getWorld().getName());
 		Block block = event.getBlock().getRelative(event.getDirection(), 2);
-		plugin.getServer().broadcastMessage(block.getType().name());
 		if (blockMem.blockPlaced(block.getLocation().toVector())) {
 			blockMem.remove(block.getLocation().toVector());
 			blockMem.put(event.getBlock().getRelative(event.getDirection(), 1).getLocation().toVector());
-		} else {
-			plugin.getServer().broadcastMessage(ChatColor.RED + "Was not found in BlockMemory!");
 		}
-		
 	}
 
 }
