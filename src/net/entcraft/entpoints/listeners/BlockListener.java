@@ -1,7 +1,10 @@
 package net.entcraft.entpoints.listeners;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import net.entcraft.entpoints.*;
 import net.entcraft.utils.Config;
 
@@ -14,7 +17,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.util.Vector;
 
 public class BlockListener extends EntListener implements Listener {
 	
@@ -75,6 +81,46 @@ public class BlockListener extends EntListener implements Listener {
 			}
 			
 		}
+	}
+	
+	// Used to prevent glitching with pistons when they are extended
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void pistonExtend(BlockPistonExtendEvent event) {
+		List<Block> bList = new ArrayList<Block>();
+		BlockMemory blockMem = blockMemory.get(event.getBlock().getLocation().getWorld().getName());
+		for (Block block : event.getBlocks()) {
+			if (blockMem.blockPlaced(block.getLocation().toVector())) {
+				bList.add(block);
+			}
+		}
+		
+		if (bList.size() > 0) {
+			for (int i = 0; i < bList.size(); i++) {
+				Block block = bList.get(i);
+				Vector vec = block.getLocation().toVector();
+				blockMem.remove(vec);
+				vec.setX(vec.getBlockX() + event.getDirection().getModX());
+				vec.setY(vec.getBlockY() + event.getDirection().getModY());
+				vec.setZ(vec.getBlockZ() + event.getDirection().getModZ());
+				blockMem.put(vec);
+			}
+		}
+	}
+	
+	// Used to prevent glitching with pistons when they are retracted
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void pistonRetract(BlockPistonRetractEvent event) {
+		if (!event.isSticky()) return;
+		BlockMemory blockMem =  blockMemory.get(event.getBlock().getLocation().getWorld().getName());
+		Block block = event.getBlock().getRelative(event.getDirection(), 2);
+		plugin.getServer().broadcastMessage(block.getType().name());
+		if (blockMem.blockPlaced(block.getLocation().toVector())) {
+			blockMem.remove(block.getLocation().toVector());
+			blockMem.put(event.getBlock().getRelative(event.getDirection(), 1).getLocation().toVector());
+		} else {
+			plugin.getServer().broadcastMessage(ChatColor.RED + "Was not found in BlockMemory!");
+		}
+		
 	}
 
 }
