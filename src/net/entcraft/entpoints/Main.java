@@ -45,6 +45,8 @@ public class Main extends JavaPlugin {
 		blockListener = new BlockListener(this);
 		cmd.addSubCommand("pointCheckSelf", new PointCheck(this, false), "check");
 		cmd.addSubCommand("pointCheckOther", new PointCheck(this, true), "check <player>", 1);
+		cmd.addSubCommand("timeCheck", new TimeCheck(this), "time check");
+		cmd.addSubCommand("timeCheck", new TimeCheck(this), "time");
 		createTasks();
 		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(blockListener, this);
