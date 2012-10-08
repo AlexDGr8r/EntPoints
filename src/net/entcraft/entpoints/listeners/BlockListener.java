@@ -30,26 +30,29 @@ public class BlockListener extends EntListener implements Listener {
 	public BlockListener(Main instance) {
 		super(instance);
 		
+		Config config = plugin.config;
+		//Valid blocks
+		loggedBlocks.put(Material.COAL_ORE, 			config.get("Points.BlockBreak.COAL", 1));
+		loggedBlocks.put(Material.DIAMOND_ORE, 			config.get("Points.BlockBreak.DIAMOND", 6));
+		loggedBlocks.put(Material.EMERALD_ORE, 			config.get("Points.BlockBreak.EMERALD", 2));
+		loggedBlocks.put(Material.GOLD_ORE, 			config.get("Points.BlockBreak.GOLD", 2));
+		loggedBlocks.put(Material.IRON_ORE, 			config.get("Points.BlockBreak.IRON", 1));
+		loggedBlocks.put(Material.LAPIS_ORE, 			config.get("Points.BlockBreak.LAPIS", 2));
+		loggedBlocks.put(Material.MOB_SPAWNER, 			config.get("Points.BlockBreak.SPAWNER", 4));
+		int redstonePoints = config.get("Points.BlockBreak.REDSTONE", 2);
+		loggedBlocks.put(Material.REDSTONE_ORE, 		redstonePoints);
+		loggedBlocks.put(Material.GLOWING_REDSTONE_ORE, redstonePoints);
+		
+		config.saveAllData();
+		
 		//Store separate values for each world
 		for (World world : plugin.getServer().getWorlds()) {
 			File f = new File(plugin.getDataFolder(), "block-" + world.getName() + ".bin");
 			BlockMemory blockMem = new BlockMemory(f.toString());
 			blockMem.load();
+			blockMem.cleanup(world, loggedBlocks.keySet());
 			blockMemory.put(world.getName(), blockMem);
 		}
-		
-		Config config = plugin.config;
-		//Valid blocks
-		loggedBlocks.put(Material.COAL_ORE, 	config.get("Points.BlockBreak.COAL", 1));
-		loggedBlocks.put(Material.DIAMOND_ORE, 	config.get("Points.BlockBreak.DIAMOND", 6));
-		loggedBlocks.put(Material.EMERALD_ORE, 	config.get("Points.BlockBreak.EMERALD", 2));
-		loggedBlocks.put(Material.GOLD_ORE, 	config.get("Points.BlockBreak.GOLD", 2));
-		loggedBlocks.put(Material.IRON_ORE, 	config.get("Points.BlockBreak.IRON", 1));
-		loggedBlocks.put(Material.LAPIS_ORE, 	config.get("Points.BlockBreak.LAPIS", 2));
-		loggedBlocks.put(Material.MOB_SPAWNER, 	config.get("Points.BlockBreak.SPAWNER", 4));
-		loggedBlocks.put(Material.REDSTONE_ORE, config.get("Points.BlockBreak.REDSTONE", 2));
-		
-		config.saveAllData();
 	}
 	
 	public void saveBlocks() {
