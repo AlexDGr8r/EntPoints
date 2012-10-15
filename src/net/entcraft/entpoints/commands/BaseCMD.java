@@ -22,4 +22,14 @@ public class BaseCMD {
 		}
 	}
 	
+	protected boolean isInteger(CommandSender sender, String s) {
+		try {
+			Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+//			sender.sendMessage(ChatColor.RED + "Error NumberFormatException: Incorrect value entered.");
+			return false;
+		}
+		return true;
+	}
+	
 }

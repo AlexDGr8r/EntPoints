@@ -14,7 +14,8 @@ public class PointGrabber {
 		Earned("earnedPoints"),
 		LastLogin("lastLogin"),
 		TimePlayed("timePlayed"),
-		Vouched("vouchedPoints");
+		Vouched("vouchedPoints"),
+		Donator("donator");
 		
 		private String columnName;
 		
@@ -141,6 +142,23 @@ public class PointGrabber {
 	public void setLastLogin(String player) {
 		Date today = new Date();
 		sql.standardQuery("UPDATE " + Main.tableName + " SET " + PointColumn.LastLogin.toString() + "=" + today.getTime() + "  WHERE pname='" + player + "';");
+	}
+	
+	public boolean isDonator(String player) {
+		ResultSet rs = sql.sqlQuery("SELECT " + PointColumn.Donator.toString() + " FROM " + Main.tableName + " WHERE pname='" + player + "';");
+		boolean donated = false;
+		try {
+			rs.first();
+			donated = rs.getBoolean(PointColumn.Donator.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return donated;
+	}
+	
+	public void setDonator(String player, boolean b) {
+		int i = b ? 1 : 0;
+		sql.standardQuery("UPDATE " + Main.tableName + " SET " + PointColumn.Donator.toString() + "=" + i + "  WHERE pname='" + player + "';");
 	}
 	
 }

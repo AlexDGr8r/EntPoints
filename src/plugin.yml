@@ -8,3 +8,6 @@ commands:
   points:
     description: Base points command
     usage: /points <args>
+  rewards:
+    description: Base Reward System command
+    usage: /rewards <args>

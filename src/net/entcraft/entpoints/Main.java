@@ -20,6 +20,8 @@ public class Main extends JavaPlugin {
 	public HashMap<String, Long> timePlayedWhenLogin = new HashMap<String, Long>();
 	
 	private BlockListener blockListener;
+	@SuppressWarnings("unused")
+	private RewardSystem rewardSystem;
 	
 	private static Logger log;
 	
@@ -38,7 +40,7 @@ public class Main extends JavaPlugin {
 		sql.init();
 		if (!sql.checkTable(tableName)) {
 			log.info("Points table does not exist! Creating table...");
-			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int, lastLogin bigint, timePlayed bigint);");
+			sql.standardQuery("CREATE TABLE " + tableName + " (pname varchar(255) PRIMARY KEY, donatedPoints int, earnedPoints int, vouchedPoints int, lastLogin bigint, timePlayed bigint, donator bit);");
 			log.info("Points table created!");
 		}
 		pointGrabber = new PointGrabber(sql);
@@ -47,6 +49,7 @@ public class Main extends JavaPlugin {
 		cmd.addSubCommand("pointCheckOther", new PointCheck(this, true), "check <player>", 1);
 		cmd.addSubCommand("timeCheck", new TimeCheck(this), "time check");
 		cmd.addSubCommand("timeCheck", new TimeCheck(this), "time");
+		rewardSystem = new RewardSystem(this);
 		createTasks();
 		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(blockListener, this);
@@ -69,6 +72,10 @@ public class Main extends JavaPlugin {
 	
 	public static void log_info(String s) {
 		log.info(s);
+	}
+	
+	public PointGrabber getPointGrabber() {
+		return this.pointGrabber;
 	}
 
 }
